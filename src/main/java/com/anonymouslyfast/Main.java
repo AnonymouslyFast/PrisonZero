@@ -1,5 +1,8 @@
 package com.anonymouslyfast;
 
+import com.anonymouslyfast.World.Generators.FlatWorldGenerator;
+import com.anonymouslyfast.World.Generators.VoidWorldGenerator;
+import com.anonymouslyfast.World.WorldGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -21,9 +24,9 @@ public class Main {
         // Temporary basic world
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
-        instanceContainer.setGenerator(unit -> {
-            unit.modifier().fillHeight(0, 40, Block.STONE);
-        });
+        // WorldGenerator voidGenerator = new VoidWorldGenerator();
+        WorldGenerator flatGenerator = new FlatWorldGenerator();
+        instanceContainer.setGenerator(flatGenerator.createGenerator());
 
         // Simple lighting
         instanceContainer.setChunkSupplier(LightingChunk::new);
@@ -33,9 +36,9 @@ public class Main {
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             final Player player = event.getPlayer();
             event.setSpawningInstance(instanceContainer);
-            player.setRespawnPoint(new Pos(0,43,0));
+            player.setRespawnPoint(flatGenerator.getDefaultSpawnPosition());
         });
 
-        minecraftServer.start(serverAdress, serverPort); // Currently starting on local port
+        minecraftServer.start(serverAdress, serverPort);
     }
 }
