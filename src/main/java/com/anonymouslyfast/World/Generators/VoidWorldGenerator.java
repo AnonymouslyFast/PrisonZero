@@ -1,6 +1,5 @@
 package com.anonymouslyfast.World.Generators;
 
-import com.anonymouslyfast.World.WorldGenerator;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;

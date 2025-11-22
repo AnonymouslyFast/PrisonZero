@@ -1,17 +1,14 @@
 package com.anonymouslyfast;
 
 import com.anonymouslyfast.World.Generators.FlatWorldGenerator;
-import com.anonymouslyfast.World.Generators.VoidWorldGenerator;
-import com.anonymouslyfast.World.WorldGenerator;
+import com.anonymouslyfast.World.Generators.WorldGenerator;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
-import net.minestom.server.instance.block.Block;
 
 public class Main {
 
