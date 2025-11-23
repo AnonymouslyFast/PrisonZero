@@ -1,4 +1,4 @@
-package com.anonymouslyfast.World.Generators;
+package com.anonymouslyfast.game.world.Generators;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.generator.Generator;

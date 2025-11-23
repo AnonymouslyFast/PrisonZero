@@ -1,4 +1,4 @@
-package com.anonymouslyfast.World;
+package com.anonymouslyfast.game.world.commands;
 
 import net.minestom.server.command.builder.Command;
 

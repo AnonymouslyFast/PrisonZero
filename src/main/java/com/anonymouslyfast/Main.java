@@ -1,41 +1,36 @@
 package com.anonymouslyfast;
 
-import com.anonymouslyfast.World.Generators.FlatWorldGenerator;
-import com.anonymouslyfast.World.Generators.WorldGenerator;
+import com.anonymouslyfast.game.player.listeners.JoinListener;
+import com.anonymouslyfast.game.world.Generators.FlatWorldGenerator;
+import com.anonymouslyfast.game.world.World;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
-import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.LightingChunk;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
+import org.jetbrains.annotations.NotNull;
 
-public class Main {
 
-    private static final String serverAdress = "0.0.0.0";
+public final class Main {
+
+    private static final String serverAddress = "0.0.0.0";
     private static final int serverPort = 25565; // Default mc port
 
     static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        // Temporary basic world
-        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
-        // WorldGenerator voidGenerator = new VoidWorldGenerator();
-        WorldGenerator flatGenerator = new FlatWorldGenerator();
-        instanceContainer.setGenerator(flatGenerator.createGenerator());
+        World world = new World(new FlatWorldGenerator())
+                .enableLighting(true)
+                .enableSaveWorld(true)
+                .generate();
 
-        // Simple lighting
-        instanceContainer.setChunkSupplier(LightingChunk::new);
+        registerPlayerEvents(world);
 
-        // Simple player join event
-        GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
-        globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
-            final Player player = event.getPlayer();
-            event.setSpawningInstance(instanceContainer);
-            player.setRespawnPoint(flatGenerator.getDefaultSpawnPosition());
-        });
+        minecraftServer.start(serverAddress, serverPort);
+    }
 
-        minecraftServer.start(serverAdress, serverPort);
+    static void registerPlayerEvents(World world) {
+        EventNode<@NotNull Event> playerNode = EventNode.all("Player");
+        playerNode.addListener(new JoinListener(world));
+
+        MinecraftServer.getGlobalEventHandler().addChild(playerNode);
     }
 }
