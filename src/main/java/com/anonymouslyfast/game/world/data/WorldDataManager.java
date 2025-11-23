@@ -18,8 +18,8 @@ public class WorldDataManager {
 
     private final String tableQuery = """
                 CREATE TABLE IF NOT EXISTS `worlds` (
-                    name TEXT NOT NULL,
-                    uuid TEXT NOT NULL PRIMARY KEY,
+                    name TEXT NOT NULL PRIMARY KEY,
+                    uuid TEXT NOT NULL,
                     generator TEXT NOT NULL,
                     save_world_enabled BOOLEAN NOT NULL,
                     lighting_enabled BOOLEAN NOT NULL
@@ -32,6 +32,8 @@ public class WorldDataManager {
     }
 
     public Boolean saveWorld(World world) {
+        if (!world.isWorldSaveEnabled()) return false;
+
         try {
             PreparedStatement statement = serverDataManager.getConnection().prepareStatement(
                     "INSERT OR REPLACE INTO worlds(name, uuid, generator, save_world_enabled, lighting_enabled) " +

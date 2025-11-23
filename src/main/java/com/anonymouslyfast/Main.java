@@ -36,9 +36,10 @@ public final class Main {
         if (!schemFolder.exists()) schemFolder.mkdir();
 
         serverDataManager = new DataManager(BASE_SERVER_PATH + "Databases/server.db");
+        worldManager = new WorldManager(serverDataManager);
         serverDataManager.loadTables();
 
-        worldManager = new WorldManager(serverDataManager);
+
         World activeWorld = registerWorldSystem();
 
         MinecraftServer.getCommandManager().register(new WorldCommand(worldManager));
@@ -71,7 +72,8 @@ public final class Main {
         if (worldManager.getAllWorlds().length > 0) {
             world = worldManager.getAllWorlds()[0];
             world.generate();
-        // Creating a default world if there's no worlds.
+            worldManager.getWorldDataManager().saveWorld(world);
+            // Creating a default world if there's no worlds.
         } else if (worldManager.getAllWorlds().length == 0) {
            world = new World(new FlatWorldGenerator())
                     .setName("defaultWorld")
@@ -79,6 +81,7 @@ public final class Main {
                     .enableLighting(true)
                     .generate();
             worldManager.registerWorld(world, world.getInstanceContainer().getUuid());
+            worldManager.getWorldDataManager().saveWorld(world);
         }
         return world;
     }

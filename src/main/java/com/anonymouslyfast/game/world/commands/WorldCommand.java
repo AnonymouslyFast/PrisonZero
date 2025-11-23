@@ -46,7 +46,7 @@ public class WorldCommand extends Command {
         addSyntax((sender, args) -> {
             if (!args.get(stringArg).equalsIgnoreCase("importschem")) return;
             Player player = (Player) sender;
-            World world = worldManager.getAllWorlds()[0];
+            World world = worldManager.getWorld(player.getInstance().getUuid());
             String fileName = args.get(schemFileArg);
             File schemFile = new File(Main.BASE_SERVER_PATH + "Schematics/" + fileName);
             if (!schemFile.exists()) {
@@ -55,7 +55,7 @@ public class WorldCommand extends Command {
             }
 
             try {
-                Schematic schem = SchematicLoader.load(schemFile);
+                Schematic schem = SchematicLoader.load(schemFile.getPath());
                 world.pasteSchematic(schem, player.getPosition().asVec());
                 System.out.println("schematic pasting");
             } catch (ParsingException e) {

@@ -22,8 +22,8 @@ public final class WorldManager {
 
     public WorldGenerator parseStringToWorldGenerator(String worldGenerator) {
         return switch (worldGenerator) {
-            case "flatWorldGenerator" -> new FlatWorldGenerator();
-            case "voidWorldGenerator" -> new VoidWorldGenerator();
+            case "FlatWorldGenerator" -> new FlatWorldGenerator();
+            case "VoidWorldGenerator" -> new VoidWorldGenerator();
             default -> new VoidWorldGenerator();
         };
     }
