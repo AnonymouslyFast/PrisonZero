@@ -7,4 +7,7 @@ public interface WorldGenerator {
 
     Generator createGenerator();
     Pos getDefaultSpawnPosition();
+
+    @Override
+    String toString();
 }

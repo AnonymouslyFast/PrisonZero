@@ -9,7 +9,7 @@ import net.minestom.server.instance.anvil.AnvilLoader;
 
 public class World {
 
-    private final String WORLDS_PATH = "Worlds/";
+    private final static String WORLDS_PATH = "Worlds/";
 
     private final WorldGenerator worldGenerator;
     private boolean enabledLighting;
@@ -50,6 +50,7 @@ public class World {
 
         instanceContainer.setGenerator(worldGenerator.createGenerator());
 
+
         // Lighting
         if (enabledLighting) instanceContainer.setChunkSupplier(LightingChunk::new);
 
@@ -70,6 +71,10 @@ public class World {
     {
         return worldName;
     }
+
+    public Boolean  isLightingEnabled() { return enabledLighting; }
+
+    public Boolean isWorldSaveEnabled() { return saveWorldEnabled; }
 
 
 }

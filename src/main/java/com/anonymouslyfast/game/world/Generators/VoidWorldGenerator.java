@@ -19,4 +19,9 @@ public class VoidWorldGenerator implements WorldGenerator {
     public Pos getDefaultSpawnPosition() {
         return new Pos(0, 1, 0);
     }
+
+    @Override
+    public String toString() {
+        return "VoidWorldGenerator";
+    }
 }

@@ -18,4 +18,9 @@ public class FlatWorldGenerator implements WorldGenerator {
     public Pos getDefaultSpawnPosition() {
         return new Pos(0, 5, 0);
     }
+
+    @Override
+    public String toString() {
+        return "FlatWorldGenerator";
+    }
 }
