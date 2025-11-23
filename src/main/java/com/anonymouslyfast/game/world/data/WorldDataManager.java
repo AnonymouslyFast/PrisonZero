@@ -1,6 +1,7 @@
 package com.anonymouslyfast.game.world.data;
 
 import com.anonymouslyfast.game.data.DataManager;
+import com.anonymouslyfast.game.world.Generators.FlatWorldGenerator;
 import com.anonymouslyfast.game.world.Generators.WorldGenerator;
 import com.anonymouslyfast.game.world.World;
 import com.anonymouslyfast.game.world.WorldManager;
@@ -8,6 +9,7 @@ import com.anonymouslyfast.game.world.WorldManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class WorldDataManager {
 
@@ -20,7 +22,7 @@ public class WorldDataManager {
                     uuid TEXT NOT NULL PRIMARY KEY,
                     generator TEXT NOT NULL,
                     save_world_enabled BOOLEAN NOT NULL,
-                    lighting_enabled BOOLEAN NOT NULL,
+                    lighting_enabled BOOLEAN NOT NULL
                 );""";
 
     public WorldDataManager(DataManager serverDataManager, WorldManager worldManager) {
@@ -51,21 +53,28 @@ public class WorldDataManager {
         return true;
     }
 
+    public void saveAllWorlds() {
+        for (World world : worldManager.getAllWorlds()) {
+            saveWorld(world);
+        }
+    }
+
     public Boolean loadWorlds() {
         try {
             ResultSet resultSet = serverDataManager.getConnection().prepareStatement("SELECT * FROM worlds").executeQuery();
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
+                String uuid = resultSet.getString("uuid");
                 String generator = resultSet.getString("generator");
                 WorldGenerator parsedGenerator = worldManager.parseStringToWorldGenerator(generator);
-                Boolean saveWorldEnabled = resultSet.getBoolean("save_world_enabled");
-                Boolean lightingEnabled = resultSet.getBoolean("lighting_enabled");
+                boolean saveWorldEnabled = resultSet.getBoolean("save_world_enabled");
+                boolean lightingEnabled = resultSet.getBoolean("lighting_enabled");
 
                 World world = new World(parsedGenerator)
                         .enableSaveWorld(saveWorldEnabled)
                         .enableLighting(lightingEnabled)
                         .setName(name);
-                worldManager.registerWorld(world);
+                worldManager.registerWorld(world, UUID.fromString(uuid));
             }
         } catch(SQLException e) {
             //TODO: replace with logger stuff

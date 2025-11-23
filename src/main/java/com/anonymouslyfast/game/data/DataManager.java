@@ -17,14 +17,14 @@ public class DataManager {
         hook = new SQLiteHook(dbPath);
     }
 
-    private void loadTables() {
+    public void loadTables() {
         tables.forEach((tableName, tableQuery) -> {
             try {
                 Statement statement = hook.getConnection().createStatement();
                 statement.executeUpdate(tableQuery);
                 statement.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+               e.printStackTrace();
             }
         });
     }
