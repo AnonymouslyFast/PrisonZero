@@ -12,6 +12,7 @@ import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.UUID;
 
 
 public final class Main {
@@ -27,13 +28,7 @@ public final class Main {
     static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        // Making sure Base folder exist
-        File baseFolder = new File(BASE_SERVER_PATH);
-        if (!baseFolder.exists()) baseFolder.mkdir();
-
-        // Making sure schematics folder exist
-        File schemFolder = new File(BASE_SERVER_PATH + "Schematics/");
-        if (!schemFolder.exists()) schemFolder.mkdir();
+        checkDirs();
 
         serverDataManager = new DataManager(BASE_SERVER_PATH + "Databases/server.db");
         worldManager = new WorldManager(serverDataManager);
@@ -71,8 +66,16 @@ public final class Main {
         // Generating world in first pos, if there's one.
         if (worldManager.getAllWorlds().length > 0) {
             world = worldManager.getAllWorlds()[0];
+            UUID uuid = worldManager.getSavedWorldUUID(world);
+            if (uuid == null) {
+                worldManager.getSavedWorldUUID(world);
+                return world;
+            }
+            worldManager.unregisterWorld(uuid); // removing since old uuid has been saved by dataManager.
             world.generate();
             worldManager.getWorldDataManager().saveWorld(world);
+            worldManager.registerWorld(world);
+
             // Creating a default world if there's no worlds.
         } else if (worldManager.getAllWorlds().length == 0) {
            world = new World(new FlatWorldGenerator())
@@ -80,10 +83,21 @@ public final class Main {
                     .enableSaveWorld(true)
                     .enableLighting(true)
                     .generate();
-            worldManager.registerWorld(world, world.getInstanceContainer().getUuid());
+            worldManager.registerWorld(world);
             worldManager.getWorldDataManager().saveWorld(world);
         }
         return world;
+    }
+
+    // Making sure all essential directories exist.
+    static void checkDirs() {
+        // Making sure Base folder exist
+        File baseFolder = new File(BASE_SERVER_PATH);
+        if (!baseFolder.exists()) baseFolder.mkdir();
+
+        // Making sure schematics folder exist
+        File schemFolder = new File(BASE_SERVER_PATH + "Schematics/");
+        if (!schemFolder.exists()) schemFolder.mkdir();
     }
 
 }
