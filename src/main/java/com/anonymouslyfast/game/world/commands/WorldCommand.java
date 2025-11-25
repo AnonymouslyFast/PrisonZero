@@ -1,9 +1,9 @@
 package com.anonymouslyfast.game.world.commands;
 
 import com.anonymouslyfast.Main;
-import com.anonymouslyfast.game.world.Generators.FlatWorldGenerator;
-import com.anonymouslyfast.game.world.Generators.VoidWorldGenerator;
-import com.anonymouslyfast.game.world.Generators.WorldGenerator;
+import com.anonymouslyfast.game.world.generators.FlatWorldGenerator;
+import com.anonymouslyfast.game.world.generators.VoidWorldGenerator;
+import com.anonymouslyfast.game.world.generators.WorldGenerator;
 import com.anonymouslyfast.game.world.World;
 import com.anonymouslyfast.game.world.WorldManager;
 import com.anonymouslyfast.game.world.WorldType;
@@ -33,7 +33,7 @@ public class WorldCommand extends Command {
                 (sender, context, suggestion) -> {
                     suggestion.addEntry(new SuggestionEntry("create"));
                     suggestion.addEntry(new SuggestionEntry("generate"));
-                    suggestion.addEntry(new SuggestionEntry("delete"));
+                    //suggestion.addEntry(new SuggestionEntry("delete"));
                     suggestion.addEntry(new SuggestionEntry("list"));
                     suggestion.addEntry(new SuggestionEntry("teleport"));
                     suggestion.addEntry(new SuggestionEntry("importSchematic"));
@@ -43,7 +43,16 @@ public class WorldCommand extends Command {
         makeGenerateWorldArgument(worldManager, stringArg);
         makeTeleportArgument(worldManager, stringArg);
         makeImportSchematicArgument(worldManager, stringArg);
+        makeListWorldsArgument(worldManager, stringArg);
 
+    }
+
+    void makeListWorldsArgument(WorldManager worldManager, Argument<String> stringArg) {
+        addSyntax((sender, context) -> {
+            if (!context.get(stringArg).equalsIgnoreCase("list")) return;
+            sender.sendMessage("World List:");
+            sender.sendMessage(worldManager.getAllWorldNames());
+        }, stringArg);
     }
 
     void makeGenerateWorldArgument(WorldManager worldManager, Argument<String> stringArg) {
@@ -56,7 +65,7 @@ public class WorldCommand extends Command {
         );
 
         addSyntax((sender, context) -> {
-            if (!context.get(stringArg).equals("generate")) return;
+            if (!context.get(stringArg).equalsIgnoreCase("generate")) return;
             if (!(sender instanceof Player player)) return;
 
             if (!worldManager.isNameTaken(context.get(worldArgument))) {
@@ -84,18 +93,17 @@ public class WorldCommand extends Command {
         }, stringArg, worldArgument);
     }
 
-    void makeTeleportArgument(WorldManager worldManager, Argument<String> argument) {
+    void makeTeleportArgument(WorldManager worldManager, Argument<String> stringArgument) {
 
-        var worldArgument = ArgumentType.String("world").setSuggestionCallback(
-                (sender, context, suggestion) -> {
-                    for (String name : worldManager.getAllWorldNames()) {
-                        suggestion.addEntry(new SuggestionEntry(name));
-                    }
-                }
-        );
+        var worldArgument = ArgumentType.String("world");
+        worldArgument.setSuggestionCallback((sender, context, suggestion) -> {
+           for(String name : worldManager.getAllWorldNames()) {
+               suggestion.addEntry(new SuggestionEntry(name));
+           }
+        });
 
         addSyntax((sender, context) -> {
-            if (!context.get(argument).equals("teleport")) return;
+            if (!context.get(stringArgument).equalsIgnoreCase("teleport")) return;
             if (!(sender instanceof Player player)) return;
 
             if (!worldManager.isNameTaken(context.get(worldArgument))) {
@@ -118,7 +126,7 @@ public class WorldCommand extends Command {
             player.teleport(world.getWorldGenerator().getDefaultSpawnPosition());
             player.sendMessage("Teleported you to " + world.getWorldName() + "!");
 
-        }, argument, worldArgument);
+        }, stringArgument, worldArgument);
     }
 
     void makeCreateWorldArgument(WorldManager worldManager, Argument<String> stringArg) {

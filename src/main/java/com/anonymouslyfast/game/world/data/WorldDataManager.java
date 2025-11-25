@@ -1,8 +1,7 @@
 package com.anonymouslyfast.game.world.data;
 
 import com.anonymouslyfast.game.data.DataManager;
-import com.anonymouslyfast.game.world.Generators.FlatWorldGenerator;
-import com.anonymouslyfast.game.world.Generators.WorldGenerator;
+import com.anonymouslyfast.game.world.generators.WorldGenerator;
 import com.anonymouslyfast.game.world.World;
 import com.anonymouslyfast.game.world.WorldManager;
 

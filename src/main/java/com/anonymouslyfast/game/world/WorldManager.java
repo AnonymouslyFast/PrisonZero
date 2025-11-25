@@ -1,11 +1,10 @@
 package com.anonymouslyfast.game.world;
 
 import com.anonymouslyfast.game.data.DataManager;
-import com.anonymouslyfast.game.world.Generators.FlatWorldGenerator;
-import com.anonymouslyfast.game.world.Generators.VoidWorldGenerator;
-import com.anonymouslyfast.game.world.Generators.WorldGenerator;
+import com.anonymouslyfast.game.world.generators.FlatWorldGenerator;
+import com.anonymouslyfast.game.world.generators.VoidWorldGenerator;
+import com.anonymouslyfast.game.world.generators.WorldGenerator;
 import com.anonymouslyfast.game.world.data.WorldDataManager;
-import org.jetbrains.annotations.NotNull;
 
 
 import java.util.*;
@@ -41,15 +40,21 @@ public final class WorldManager {
         worldNames.put(world.getWorldName(), world);
     }
 
-    public void unregisterWorld(World world) { worlds.remove(world.getInstanceContainer().getUuid().toString()); }
-    public void unregisterWorld(UUID worldUUID) { worlds.remove(worldUUID.toString()); }
+    public void unregisterWorld(World world) {
+        worlds.remove(world.getInstanceContainer().getUuid().toString());
+        worldNames.remove(world.getWorldName());
+    }
+    public void unregisterWorld(UUID worldUUID) {
+        worldNames.remove(getWorld(worldUUID).getWorldName());
+        worlds.remove(worldUUID.toString());
+    }
 
     public World[] getAllWorlds() {
         return worlds.values().toArray(new World[0]);
     }
 
-    public List<String> getAllWorldNames() {
-        return worldNames.keySet().stream().toList();
+    public String[] getAllWorldNames() {
+        return worldNames.keySet().toArray(new String[0]);
     }
 
     public boolean isNameTaken(String name) {

@@ -1,7 +1,7 @@
 package com.anonymouslyfast.game.world;
 
 import com.anonymouslyfast.Main;
-import com.anonymouslyfast.game.world.Generators.WorldGenerator;
+import com.anonymouslyfast.game.world.generators.WorldGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.InstanceContainer;

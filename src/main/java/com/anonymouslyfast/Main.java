@@ -2,7 +2,7 @@ package com.anonymouslyfast;
 
 import com.anonymouslyfast.game.data.DataManager;
 import com.anonymouslyfast.game.player.listeners.JoinListener;
-import com.anonymouslyfast.game.world.Generators.FlatWorldGenerator;
+import com.anonymouslyfast.game.world.generators.FlatWorldGenerator;
 import com.anonymouslyfast.game.world.World;
 import com.anonymouslyfast.game.world.WorldManager;
 import com.anonymouslyfast.game.world.commands.WorldCommand;
@@ -33,7 +33,6 @@ public final class Main {
         serverDataManager = new DataManager(BASE_SERVER_PATH + "Databases/server.db");
         worldManager = new WorldManager(serverDataManager);
         serverDataManager.loadTables();
-
 
         World activeWorld = registerWorldSystem();
 
