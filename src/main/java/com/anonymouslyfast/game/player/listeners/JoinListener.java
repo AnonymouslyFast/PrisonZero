@@ -23,7 +23,7 @@ public class JoinListener implements EventListener<AsyncPlayerConfigurationEvent
         final Player player = event.getPlayer();
         player.setGameMode(GameMode.CREATIVE);
         event.setSpawningInstance(world.getInstanceContainer());
-        player.setRespawnPoint(world.getWorldGenerator().getDefaultSpawnPosition());
+        player.setRespawnPoint(world.getSpawnPoint());
         return Result.SUCCESS;
     }
 }

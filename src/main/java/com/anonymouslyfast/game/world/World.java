@@ -3,6 +3,7 @@ package com.anonymouslyfast.game.world;
 import com.anonymouslyfast.Main;
 import com.anonymouslyfast.game.world.generators.WorldGenerator;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -24,10 +25,12 @@ public class World {
     private InstanceContainer instanceContainer;
     private boolean saveWorldEnabled;
     private String worldName = "world";
+    private Pos spawnPoint;
 
     // Builder
     public World(WorldGenerator worldGenerator) {
         this.worldGenerator = worldGenerator;
+        this.spawnPoint = worldGenerator.getDefaultSpawnPosition();
     }
 
     public World setName(String name) {
@@ -108,6 +111,9 @@ public class World {
     public Boolean  isLightingEnabled() { return enabledLighting; }
 
     public Boolean isWorldSaveEnabled() { return saveWorldEnabled; }
+
+    public Pos getSpawnPoint() { return spawnPoint; }
+    public void setSpawnPoint(Pos spawnPoint) { this.spawnPoint = spawnPoint; }
 
 
 }
